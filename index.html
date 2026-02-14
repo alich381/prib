@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Valentine Project</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* RESET */
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+/* BODY */
+body{
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(120deg,#ff758c,#ff7eb3);
+  min-height:100vh;
+}
+
+/* LOGIN */
+#loginPage{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.login-box{
+  background:rgba(255,255,255,.95);
+  padding:35px;
+  border-radius:20px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,.2);
+  animation:fadeIn .8s;
+}
+
+.login-box h2{
+  color:#ff4b7d;
+  margin-bottom:10px;
+}
+
+.login-box p{
+  font-size:14px;
+  color:#777;
+}
+
+.login-box input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  margin:15px 0;
+  font-size:15px;
+}
+
+.login-box button{
+  width:100%;
+  padding:12px;
+  background:#ff4b7d;
+  border:none;
+  border-radius:12px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.login-box button:hover{
+  background:#ff2f68;
+}
+
+#error{
+  color:red;
+  font-size:14px;
+}
+
+/* MAIN */
+#mainPage{
+  display:none;
+  animation:fadeIn 1s;
+}
+
+/* HEADER */
+header{
+  text-align:center;
+  padding:40px 20px;
+  color:white;
+}
+
+header h1{
+  font-family:'Playfair Display',serif;
+  font-size:2.8em;
+}
+
+header p{
+  font-family:'Playfair Display',serif;
+  letter-spacing:1px;
+  opacity:.9;
+}
+
+/* LETTER */
+.letter{
+  background:#fffdf5;
+  margin:20px;
+  padding:30px 25px;
+  border-radius:15px;
+  box-shadow:0 15px 30px rgba(0,0,0,.2);
+  border:1px solid #f1e6d0;
+  font-family:'Dancing Script',cursive;
+  font-size:20px;
+  line-height:1.8;
+  color:#5a4633;
+  position:relative;
+}
+
+.letter::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:6px;
+  background:linear-gradient(90deg,#ff9a9e,#fad0c4);
+  border-radius:15px 15px 0 0;
+}
+
+.letter-header{
+  font-size:18px;
+  margin-bottom:15px;
+}
+
+.letter-footer{
+  text-align:right;
+  margin-top:25px;
+  font-size:19px;
+}
+
+/* GALLERY */
+.gallery-title{
+  text-align:center;
+  color:white;
+  margin-top:25px;
+}
+
+.gallery{
+  padding:25px 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:15px;
+}
+
+.gallery img{
+  width:100%;
+  height:180px;
+  border-radius:18px;
+  object-fit:cover;
+  box-shadow:0 8px 15px rgba(0,0,0,.15);
+
+  opacity:0;
+  transform:translateY(40px) scale(.9);
+  transition:all .9s cubic-bezier(.25,.46,.45,.94);
+}
+
+.gallery img.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+/* MUSIC PLAYER */
+.music-player{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:rgba(255,255,255,.95);
+  border-radius:15px;
+  padding:12px 15px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  z-index:999;
+}
+
+.music-info{
+  font-size:14px;
+  color:#ff4b7d;
+  font-weight:600;
+}
+
+.music-player button{
+  border:none;
+  background:#ff4b7d;
+  color:white;
+  padding:6px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.music-player button:hover{
+  background:#ff2f68;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:25px;
+  color:white;
+  font-size:14px;
+  opacity:.8;
+}
+
+/* FADE */
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+
+  <div class="login-box">
+
+    <h2>Secret Page</h2>
+    <p>Masukan password</p>
+
+    <input type="password" id="password" placeholder="Kata rahasia...">
+
+    <button onclick="login()">Masuk</button>
+
+    <div id="error"></div>
+
+  </div>
+
+</div>
+
+
+<!-- MAIN -->
+<div id="mainPage">
+
+<!-- MUSIC -->
+<div class="music-player">
+
+  <div class="music-info"> Lagu Kita</div>
+
+  <button onclick="toggleMusic()" id="musicBtn">Play</button>
+
+  <audio id="bgMusic" loop>
+    <source src="https://raw.githubusercontent.com/IkyyExecutive/IkyyBokep/main/uploads/1771045916862_72100_1771045915896_file_1646.m4a" type="audio/mpeg">
+  </audio>
+
+</div>
+
+
+<header>
+  <h1>Happy Valentine Caca</h1>
+  <p>For The One I Love Most</p>
+</header>
+
+
+<!-- LETTER -->
+<div class="letter">
+
+  <div class="letter-header">
+    Untuk: Caca <br>
+    Dari: Ali
+  </div>
+
+  Alloo caca
+
+  <br><br>
+
+  Aku nggak pernah nyangka
+  bisa jatuh cinta sedalam ini sama kamu
+
+  <br><br>
+
+  Sama kamu hal kecil jadi berarti
+  Chat sederhana tawa kecil
+  sampai diam pun tetap nyaman
+
+  <br><br>
+
+  Terima kasih udah selalu ada
+  Terima kasih udah nerima aku apa adanya
+
+  <br><br>
+
+  Aku mungkin nggak sempurna
+  tapi perasaanku ke kamu selalu tulus
+
+  <br><br>
+
+  Aku sayang kamu hari ini besok dan seterusnya 
+
+  <div class="letter-footer">
+    — from your boyfriend Ali
+  </div>
+
+</div>
+
+
+<!-- GALLERY -->
+<h2 class="gallery-title"> Kenangan Kita</h2>
+
+<section class="gallery">
+
+  <img src="https://raw.githubusercontent.com/IkyyExecutive/IkyyBokep/main/uploads/1771046116523_49412_1771046116105_file_1648.jpg">
+  <img src="https://files.catbox.moe/1z9d0q.jpg">
+  <img src="https://files.catbox.moe/k5wsmf.jpg">
+  <img src="https://files.catbox.moe/u66gzc.jpg">
+
+</section>
+
+
+<footer>
+  chat ali ada hadiah buat kamu
+</footer>
+
+</div>
+
+
+<script>
+
+// PASSWORD
+const SECRET = "cacabaukambink";
+
+// MUSIC
+const music = document.getElementById("bgMusic");
+const btn = document.getElementById("musicBtn");
+
+function login(){
+
+  const input = document.getElementById("password").value;
+
+  if(input === SECRET){
+
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("mainPage").style.display="block";
+
+    initScrollAnim();
+
+    // AUTO PLAY
+    music.play();
+    btn.innerText="Pause";
+
+  }else{
+
+    document.getElementById("error").innerText="Kata rahasia salah 😅";
+
+  }
+
+}
+
+
+// MUSIC CONTROL
+function toggleMusic(){
+
+  if(music.paused){
+
+    music.play();
+    btn.innerText=" Pause";
+
+  }else{
+
+    music.pause();
+    btn.innerText="Play";
+
+  }
+
+}
+
+
+// SCROLL FOTO
+function initScrollAnim(){
+
+  const images = document.querySelectorAll('.gallery img');
+
+  const observer = new IntersectionObserver((entries)=>{
+
+    entries.forEach(entry=>{
+
+      if(entry.isIntersecting){
+
+        entry.target.classList.add('show');
+
+      }else{
+
+        entry.target.classList.remove('show');
+
+      }
+
+    });
+
+  },{ threshold:0.3 });
+
+  images.forEach(img=>{
+    observer.observe(img);
+  });
+
+}
+
+</script>
+
+</body>
+</html>
